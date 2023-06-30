@@ -3,6 +3,11 @@ import nltk
 
 
 def input_cities() -> list:
+    """
+    Функция возращает список городов, коротые пользователь ввел.
+    return: list
+    """
+
     list_cities = []
 
     while True:
@@ -16,6 +21,12 @@ def input_cities() -> list:
 
 
 def correct_write_city(list_cities: list) -> list:
+    """
+    Функция возращает список городов, которые правильно написал пользователь
+    param list_cities: list
+    return: list
+    """
+
     all_url_cities = find_url_cities()
     all_city = all_url_cities.keys()
     correct_city = []
@@ -28,6 +39,12 @@ def correct_write_city(list_cities: list) -> list:
 
 
 def incorrect_write_city(list_cities: list) -> list:
+    """
+    Функция возращает список городов, которые не правильно написал пользователь
+    param list_cities: list
+    return: list
+    """
+
     all_url_cities = find_url_cities()
     all_city = all_url_cities.keys()
     incorrect_city = []
@@ -40,6 +57,12 @@ def incorrect_write_city(list_cities: list) -> list:
 
 
 def presumably_correct_cities(incorrect_cities: list) -> list:
+    """
+    Функция возращает список городов, в котором есть несколько вариантов
+    param incorrect_cities: list
+    return: list
+    """
+
     all_url_cities = find_url_cities()
     all_city = all_url_cities.keys()
     presumably_cities = []
@@ -71,6 +94,12 @@ def presumably_correct_cities(incorrect_cities: list) -> list:
 
 
 def choosing_from_proposed_cities(presumably_cities: list) -> list:
+    """
+    Функция возращает корретные города. Пользователь выбирает из предположительно правильных
+    param presumably_cities: list
+    return: list
+    """
+
     find_correct_city = []
 
     for city in presumably_cities:
@@ -89,7 +118,11 @@ def choosing_from_proposed_cities(presumably_cities: list) -> list:
     return find_correct_city
 
 
-def get_correct_city():
+def get_correct_city() -> list:
+    """
+    Функия возращает корректные города.
+    return: list
+    """
     list_cities = input_cities()  # пользователь вводит города
     correct_city = correct_write_city(list_cities)  # получение корректных городов
     incorrect_city = incorrect_write_city(list_cities)  # получение не корректных городов

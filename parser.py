@@ -2,14 +2,17 @@ from bs4 import BeautifulSoup
 
 
 def find_url_cities() -> dict:
+    """
+    Функция на возращает all_url_cities. Пример -> ('Воронеж': '/voronezh').
+    return: dict
+    """
+
     URL = 'URLS.html'
 
     all_url_cities = {}
 
     soup = get_page_soup_from_file(URL)
-
     table_cities = soup.find("div", {"class": "locality-selector-popup__table"})
-
     all_tags_a = table_cities.find_all("a")
 
     for city in all_tags_a:
@@ -19,12 +22,21 @@ def find_url_cities() -> dict:
 
 
 def get_name(div: BeautifulSoup) -> str:
-    """ Возвращает название продукта """
+    """
+    Функция возвращает название продукта
+    param div: BeautifulSoup
+    return: str
+    """
     return div.text.strip()
 
 
 def get_description(main: BeautifulSoup) -> str | None:
-    """ Возвращает описание продукта """
+    """
+    Функция возвращает описание продукта
+    param main: BeautifulSoup
+    return str | None
+    """
+
     description = main.text.strip()
 
     if description == '':
@@ -34,12 +46,20 @@ def get_description(main: BeautifulSoup) -> str | None:
 
 
 def get_price(div: BeautifulSoup) -> str:
-    """ Возвращает цену """
+    """
+    Функция возращает цену.
+    param div: BeautifulSoup
+    return: str
+    """
     return div.text.strip()
 
 
 def get_new_and_old_prices(div: BeautifulSoup) -> tuple:
-    """ Возвращает новую и старую цену """
+    """
+    Функция возращает новую и страрую цену.
+    param div: BeautifulSoup
+    return tuple
+    """
     get_old_price = div.div.extract()
     old_price = get_old_price.text.strip()
 
@@ -48,7 +68,12 @@ def get_new_and_old_prices(div: BeautifulSoup) -> tuple:
 
 
 def get_product_data(product_card: BeautifulSoup) -> dict:
-    """ Возвращает все поля данных из карточки продукта """
+    """
+    Функция возращает все поля из карточки продукта
+    param product_card: BeautifulSoup
+    return: dict
+    """
+
     new_price = None
     old_price = None
 
@@ -80,19 +105,31 @@ def get_product_data(product_card: BeautifulSoup) -> dict:
 
 
 def get_products_cards_from_section(section: BeautifulSoup) -> BeautifulSoup:
-    """ Возвращает карточки товаров из секции """
+    """
+    Функция возращает товары из секции
+    param section: BeautifulSoup
+    return: BeautifulSoup
+    """
     cards_products = section.find_all("article")
     return cards_products
 
 
 def get_sections_from_page(page_soup: BeautifulSoup) -> BeautifulSoup:
-    """ Возвращает список секций """
+    """
+    Функция возращает список секций
+    param page_soup: BeautifulSoup
+    return: BeautifulSoup
+    """
     sections = page_soup.main.find_all("section")
     return sections
 
 
 def get_page_soup_from_file(file_name: str) -> BeautifulSoup:
-    """ Возвращает суп из файла """
+    """
+    Функция возращает html разметку из файла
+    param file_name: str
+    return: BeautifulSoup
+    """
     with open(file_name, "r", encoding='utf-8') as file:  # правильное открытие файла в формате html
         file_html = file.read()
 
@@ -102,7 +139,11 @@ def get_page_soup_from_file(file_name: str) -> BeautifulSoup:
 
 
 def get_data_from_locality(file_name: str) -> dict[list[dict]]:
-    """ Парсит данные со страницы населенного пункта """
+    """
+    Функция парсит данные со страницы населенного пункта или города.
+    :param file_name: str
+    :return: dict[list[dict]]
+    """
     result = {}
 
     page_soup = get_page_soup_from_file(file_name)  # получение html страницы
@@ -118,9 +159,6 @@ def get_data_from_locality(file_name: str) -> dict[list[dict]]:
                 temp.append(definition_product)
 
             result[name_sections] = temp
-
-    for products, description_product in result.items():
-        print(products, len(description_product))
 
     return result
 
