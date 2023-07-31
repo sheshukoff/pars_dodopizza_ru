@@ -2,7 +2,10 @@ import selenium
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 
+import os
+import shutil
 import time
+
 from bs4 import BeautifulSoup
 from parser import find_url_cities, get_data_from_locality
 from word_correction import get_correct_city
@@ -36,17 +39,26 @@ def get_page_soup_from_url(city_url: str) -> BeautifulSoup:
     return soup
 
 
+def check_path(path: str):
+    """
+    Функция проверяет существует ли папка
+    :param path: str
+    :return:
+    """
+    if os.path.exists(path):
+        shutil.rmtree(path)
+
+
 def write_file_from_soup(soup: BeautifulSoup, name_city: str):
     """
     Функция записывает в файл html разметку города в файл формата HTML
     param soup: BeautifulSoup
     name_city: str
     """
+    path_dodo = 'Додо пицца'
 
-    with open(f"{name_city}.html", "w", encoding='utf-8') as file:  # делаем файл в html, чтобы дергать сайт лишний раз
+    with open(f"{path_dodo}/{name_city}.html", "w", encoding='utf-8') as file:  # делаем файл в html, чтобы дергать сайт лишний раз
         file.write(str(soup))
-
-    print(name_city)
 
 
 def create_file_html(city: str) -> str:
@@ -54,24 +66,24 @@ def create_file_html(city: str) -> str:
     Функция создает html файлы для дальнейшей работы (что бы не дергать сайт)
     param list_cities: list
     """
+    path_dodo = 'Додо пицца'
     all_url_cities = find_url_cities()  # получение всех возможных городов для парсинга
 
     url_city = all_url_cities[city]
     soup_city = get_page_soup_from_url(url_city)
     write_file_from_soup(soup_city, city)
-    file_name = f'{city}.html' # Переделать так как город уже есть
+    file_name = f'{path_dodo}/{city}.html' # Переделать так как город уже есть
 
     return file_name
 
 
-# def check_load_sections(sections):
-
-
-def outro_parsing():
+def parsing_dodo_pizza():
     """
-    Функция загружает данные по Бренду, городам и продуктам
+    Функция загружает данные по Бренду, городам и продуктам в базу данных
     """
     brand = 'Додо пицца'
+    check_path(brand)  # проверяет существует ли папка "Додо пицца"
+    os.mkdir(brand)  # Создается папка "Додо пицца"
     load_table_brand(brand)
 
     all_correct_city = get_correct_city()
@@ -81,6 +93,7 @@ def outro_parsing():
     load_sections = False
 
     for city in all_correct_city:
+        print(city)
         file_name = create_file_html(city)
 
         load_table_city(city)
