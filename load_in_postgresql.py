@@ -19,7 +19,7 @@ def int_price(price: str) -> int | None:
         if element.isdigit():
             new_price += element
 
-    if type(new_price) == str:
+    if len(new_price) == 0:
         return None
     else:
         return int(new_price)
